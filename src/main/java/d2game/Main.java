@@ -1,5 +1,7 @@
 package d2game;
 
+
+
 import javax.swing.*;
 
 public class Main {
@@ -8,12 +10,15 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("2D Adventure");
-
-        window.add(new GamePanel());
+        GamePanel gamePanel = new GamePanel();
+        window.add(gamePanel);
 
         window.setVisible(true);
         window.pack();
+        gamePanel.setUpGame();
         window.setLocationRelativeTo(null);
+
+
 
     }
 }

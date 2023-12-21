@@ -1,2 +1,17 @@
-package d2game.object;public class OBJ_Chest {
+package d2game.object;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
+public class OBJ_Chest extends SuperObject{
+
+    public OBJ_Chest(){
+        name="Key";
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream("/objects/key.png"));
+        } catch (IOException e) {
+           e.printStackTrace();
+        }
+    }
 }

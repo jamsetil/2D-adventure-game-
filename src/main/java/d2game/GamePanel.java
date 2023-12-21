@@ -1,6 +1,7 @@
 package d2game;
 
 import d2game.entity.Player;
+import d2game.object.SuperObject;
 import d2game.tile.TileManager;
 
 import javax.swing.*;
@@ -9,6 +10,8 @@ import java.awt.*;
 public class GamePanel extends JPanel implements Runnable{
     //Screen settings
     final int originalTileSize=16;
+
+
     final int scale =3;
     public final int tileSize = originalTileSize*scale;//48x48
     public final int maxScreenCol=16;
@@ -27,6 +30,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     public Player player =new Player(this,keyH);
     TileManager tileM=new TileManager(this);
+    public AssetSetter aSetter =new AssetSetter(this);
+    public SuperObject[] obj=new SuperObject[10];
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
 
     GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
@@ -35,6 +41,10 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyH);
         this.setFocusable(true);
         startGameThread();
+    }
+
+    public void setUpGame(){
+        aSetter.setObject();
     }
 
     public void startGameThread(){
@@ -72,8 +82,16 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D) g;
         tileM.draw(g2);
+
+        for (int i = 0;i<obj.length;i++){
+            if (obj[i]!=null){
+                obj[i].draw(g2,this);
+            }
+        }
+
         player.draw(g2);
         g2.dispose();
+
 
     }
 }
