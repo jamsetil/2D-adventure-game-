@@ -14,13 +14,14 @@ public class Player extends Entity{
     KeyHandler keyH;
     public final int screenX;//where player will be drawn
     public final int screenY;
-    int hasKey=0;
+    public int hasKey=0;
+
 
     public Player(GamePanel gp,KeyHandler keyH){
         this.gp=gp;
         this.keyH=keyH;
-        screenX=gp.screenWidth/2;
-        screenY=gp.screenHeight/2;
+        screenX=gp.screenWidth/2-(gp.tileSize/2);
+        screenY=gp.screenHeight/2-(gp.tileSize/2);
         setDefaultValues();
         getPlayerImage();
         solidArea = new Rectangle(8,16,32,32);
@@ -29,8 +30,8 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues(){
-        worldX=gp.tileSize*23-(gp.tileSize/2);//centering player position on map
-        worldY=gp.tileSize*21-(gp.tileSize/2);
+        worldX=gp.tileSize*23-(gp.tileSize/4);//centering player position on map
+        worldY=gp.tileSize*21-(gp.tileSize/4);
         speed=4;
         direction="down";
     }
@@ -113,14 +114,29 @@ public class Player extends Entity{
             String objectName = gp.obj[index].name;
             switch (objectName){
                 case "Key":
+                    gp.playSE(1);
                     hasKey++;
                     gp.obj[index]=null;
+                    gp.ui.showMessage("You got a key!");
                     break;
                 case "Door":
                     if (hasKey >0){
+                        gp.ui.showMessage("You opened the door!");
+                        gp.playSE(3);
                         gp.obj[index]=null;
                         hasKey--;
-                    }
+                    }else gp.ui.showMessage("You need a key!");
+                    break;
+                case "Boots":
+                    gp.ui.showMessage("Speed up!");
+                    gp.playSE(2);
+                    speed+=1;
+                    gp.obj[index]=null;
+                    break;
+                case "Chest":
+                    gp.ui.gameFinished=true;
+                    gp.stopMusic();
+                    gp.playSE(4);
                     break;
             }
         }
@@ -130,6 +146,8 @@ public class Player extends Entity{
     public void draw(Graphics g2){
 //        g2.setColor(Color.white);
 //        g2.fillRect(x,y,gp.tileSize,gp.tileSize);
+
+
 
         BufferedImage image = null;
         switch (direction){
